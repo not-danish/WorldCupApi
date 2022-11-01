@@ -2,9 +2,9 @@ import requests
 import json
 
 #enter endpoint here
-endpoint = "players/31000"
+endpoint = "teams/18645"
 #enter parameters here
-parameters = {}
+parameters = {"include":"goalscorers","seasons":"892"}
 
 #The base url is the url of the api which will return the specified requested data
 token = "uaHKOLCbUA35mY7wLI97jgXsmaS0xDohDasg0OwQ26Cfo29xJ3PtYmj9NbVK"

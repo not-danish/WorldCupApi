@@ -28,9 +28,9 @@ def teamgoals(team_id: int, season_id: int) -> dict:
   #gets all the goals scored by all the players in a specified team (team_id) in a specified year (season_id)
   url = getapiurl(f"teams/{team_id}",{"include":"goalscorers","seasons":season_id})
   data = datatodict(url)
-  return data['data']['goalscorers']['data'][0]
+  return data['data']['goalscorers']['data']
 
-def player(player_id: int) -> dict:
+def player(player_id: int) -> list:
   #gets info on players based on player_id
   url = getapiurl(f"players/{player_id}", {})
   data = datatodict(url)

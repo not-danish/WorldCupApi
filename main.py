@@ -1,22 +1,16 @@
-import requests
-import json
+import worldcup
+#the season_id for the 2018 world cup is 892
 
-#enter endpoint here
-endpoint = "teams/18645"
-#enter parameters here
-parameters = {"include":"goalscorers","seasons":"892"}
+#gets 
+print(worldcup.teamgoals(18660,892))
 
-#The base url is the url of the api which will return the specified requested data
-token = "uaHKOLCbUA35mY7wLI97jgXsmaS0xDohDasg0OwQ26Cfo29xJ3PtYmj9NbVK"
-base_url = f"https://soccer.sportmonks.com/api/v2.0/{endpoint}?api_token={token}"
+print("----------------------------------------")
+print("----------------------------------------")
 
-#Adds all the parameters into the base url
-if len(parameters) != 0:
-  for key in parameters:
-    base_url = base_url + f"&{key}={parameters[key]}"
+print(worldcup.player(30289))
 
-#requests the data and converts the json to a python dictionary
-data = json.loads(requests.get(base_url).text)
+print("----------------------------------------")
+print("----------------------------------------")
 
-
-print(data)
+#gets all of the top scorers for the 2018 world cup
+print(worldcup.topscorers(892))

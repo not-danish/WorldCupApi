@@ -16,4 +16,7 @@ print("----------------------------------------")
 print("----------------------------------------")
 
 englandgoals = worldcup.teamgoals("England", 2006)
-print(englandgoals)
+
+spain_squad  = worldcup.squad('Spain',2014)
+print(spain_squad)
+worldcup.datatocsv(spain_squad, "spain_squad.csv")

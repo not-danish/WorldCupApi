@@ -25,6 +25,7 @@ def searchteam(team_name: str) -> int:
   url = getapiurl(f"teams/search/{team_name}",{})
   data = datatodict(url)['data']
   if data == []:
+    print ("Could not find team. Please try again.")
     return None
   else:
     return data[0]['id']
@@ -35,9 +36,8 @@ def getseason_id(year: int):
   for i in range(len(data)):
     if str(year) == data[i]['name']:
       return data[i]['id']
-    else:
-      print("Please enter a valid world cup year from 2006 to 2022")
-      return None
+  print("Please enter a valid world cup year from 2006-2022")
+  return None
 
 def matchgoals(fixture_id: int) -> dict:
   #gets all of the goals scored in a specific fixture
@@ -103,6 +103,20 @@ def topassist(year: int) -> List[Dict]:
           data[player].pop('player')
           data[player].pop('type')
     return data
+
+def squad(team: str, year: int) -> List[Dict]:
+  season_id = getseason_id(year)
+  team_id = searchteam(team)
+  if season_id == None:
+    return {}
+  else:
+    url = getapiurl(f"teams/{team_id}",{"include":"squad.player"})
+    data = datatodict(url)
+    if 'data' not in data:
+      data = {}
+    else:
+      data = data['data']['squad']['data']
+      return data
 
 def fields(data: dict) -> list:
   #gets all of the fields for a specific dict

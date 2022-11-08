@@ -1,0 +1,8 @@
+position,season_id,player_id,team_id,stage_id,goals,penalty_goals,type
+15,892,997,18645,1727,1,1,goals
+1,892,922,18645,1728,1,0,goals
+7,892,2884,18645,1728,1,0,goals
+3,892,1016,18645,1729,1,0,goals
+17,892,982,18645,1733,2,0,goals
+61,892,820,18645,1733,1,0,goals
+1,892,997,18645,1733,5,2,goals

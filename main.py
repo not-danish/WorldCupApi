@@ -16,6 +16,13 @@ print("----------------------------------------")
 print("----------------------------------------")
 
 #gets all of the top scorers for the 2018 world cup
-topscorers = worldcup.topscorers(892)
-print(topscorers)
-worldcup.datatocsv(topscorers, "scorers.csv")
+#topscorers = worldcup.topscorers(892)
+#print(topscorers)
+#worldcup.datatocsv(topscorers, "scorers.csv")
+
+#topassist = worldcup.topassist(892)
+#worldcup.datatocsv(topassist, "assists.csv")
+
+england_goals = worldcup.teamgoals('England',892)
+
+worldcup.datatocsv(england_goals, "england_goals.csv")

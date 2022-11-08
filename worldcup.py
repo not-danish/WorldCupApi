@@ -31,12 +31,13 @@ def searchteam(team_name: str) -> int:
 
 def getseason_id(year: int):
   url = getapiurl("leagues/732",{"include":"seasons"})
-  data = datatodict(url)
-  if str(year) == data['data']['seasons']['name']:
-    return data['data']['seasons']['id']
-  else:
-    print("Please enter a valid world cup year from 2006 to 2022")
-    return None
+  data = datatodict(url)['data']['seasons']['data']
+  for i in range(len(data)):
+    if str(year) == data[i]['name']:
+      return data[i]['id']
+    else:
+      print("Please enter a valid world cup year from 2006 to 2022")
+      return None
 
 def matchgoals(fixture_id: int) -> dict:
   #gets all of the goals scored in a specific fixture

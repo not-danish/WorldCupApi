@@ -29,18 +29,31 @@ def searchteam(team_name: str) -> int:
   else:
     return data[0]['id']
 
+def getseason_id(year: int):
+  url = getapiurl("leagues/732",{"include":"seasons"})
+  data = datatodict(url)
+  if str(year) == data['data']['seasons']['name']:
+    return data['data']['seasons']['id']
+  else:
+    print("Please enter a valid world cup year from 2006 to 2022")
+    return None
+
 def matchgoals(fixture_id: int) -> dict:
   #gets all of the goals scored in a specific fixture
   url = getapiurl(f"fixtures/{fixture_id}",{"include":"goals"})
   data = datatodict(url)
   return data
   
-def teamgoals(team_name: str, season_id: int) -> List[Dict]:
+def teamgoals(team_name: str, year: int) -> List[Dict]:
   #gets all the goals scored by all the players in a specified team (team_id) in a specified year (season_id)
   team_id = searchteam(team_name)
-  url = getapiurl(f"teams/{team_id}",{"include":"goalscorers","seasons":season_id})
-  data = datatodict(url)
-  return data['data']['goalscorers']['data']
+  season_id = getseason_id(year)
+  if season_id == None:
+    return {}
+  else:
+    url = getapiurl(f"teams/{team_id}",{"include":"goalscorers","seasons":season_id})
+    data = datatodict(url)
+    return data['data']['goalscorers']['data']
 
 def player(player_id: int) -> List[Dict]:
   #gets info on players based on player_id
@@ -52,35 +65,43 @@ def player(player_id: int) -> List[Dict]:
     data = {}
   return data
 
-def topscorers(season_id: int) -> List[Dict]:
+def topscorers(year: int) -> List[Dict]:
   #gets top 25 scorers for the world cup season (season_id)
-  url = getapiurl(f"topscorers/season/{season_id}",{"include":"goalscorers.player.team"})
-  data = datatodict(url)
-  if 'data' not in data:
-    data = {}
+  season_id = getseason_id(year)
+  if season_id == None:
+    return {}
   else:
-    data = data['data']['goalscorers']['data']
-    for player in range(len(data)):
-      if 'player' in data[player]:
-        data[player]['player_id'] = data[player]['player_id']
-        data[player].pop('player')
-        data[player].pop('type')
-  return data
+    url = getapiurl(f"topscorers/season/{season_id}",{"include":"goalscorers.player.team"})
+    data = datatodict(url)
+    if 'data' not in data:
+      data = {}
+    else:
+      data = data['data']['goalscorers']['data']
+      for player in range(len(data)):
+        if 'player' in data[player]:
+          data[player]['player_id'] = data[player]['player']['player_id']
+          data[player].pop('player')
+          data[player].pop('type')
+    return data
 
-def topassist(season_id: int) -> List[Dict]:
+def topassist(year: int) -> List[Dict]:
   #gets top 25 assisters for the world cup season (season_id)
-  url = getapiurl(f"topscorers/season/{season_id}",{"include":"assistscorers.player.team"})
-  data = datatodict(url)
-  if 'data' not in data:
-    data = {}
+  season_id = getseason_id(year)
+  if season_id == None:
+    return {}
   else:
-    data = data['data']['assistscorers']['data']
-    for player in range(len(data)):
-      if 'player' in data[player]:
-        data[player]['player_id'] = data[player]['player_id']
-        data[player].pop('player')
-        data[player].pop('type')
-  return data
+    url = getapiurl(f"topscorers/season/{season_id}",{"include":"assistscorers.player.team"})
+    data = datatodict(url)
+    if 'data' not in data:
+      data = {}
+    else:
+      data = data['data']['assistscorers']['data']
+      for player in range(len(data)):
+        if 'player' in data[player]:
+          data[player]['player_id'] = data[player]['player_id']
+          data[player].pop('player')
+          data[player].pop('type')
+    return data
 
 def fields(data: dict) -> list:
   #gets all of the fields for a specific dict

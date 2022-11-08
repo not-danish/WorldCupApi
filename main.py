@@ -23,6 +23,7 @@ print("----------------------------------------")
 #topassist = worldcup.topassist(892)
 #worldcup.datatocsv(topassist, "assists.csv")
 
-england_goals = worldcup.teamgoals('England',892)
+#england_goals = worldcup.teamgoals('England',892)
+#worldcup.datatocsv(england_goals, "england_goals.csv")
 
-worldcup.datatocsv(england_goals, "england_goals.csv")
+worldcup.getseason_id(2018)

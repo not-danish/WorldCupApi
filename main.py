@@ -1,22 +1,8 @@
 import worldcup
 
-#the season_id for the 2018 world cup is 892
-
-#gets all the players who scored goals for a specific team (team_id) for a specific year (season_id)
-#goals = worldcup.teamgoals(18647,892)
-#print(goals)
-#worldcup.datatocsv(goals,"goals.csv")
-
-print("----------------------------------------")
-print("----------------------------------------")
-
-#get information on a specific player based on their player_id
-
-print("----------------------------------------")
-print("----------------------------------------")
-
 englandgoals = worldcup.teamgoals("England", 2006)
 
-spain_squad  = worldcup.squad('Spain',2014)
-print(spain_squad)
+spain_squad = worldcup.squad('Spain', 2014)
 worldcup.datatocsv(spain_squad, "spain_squad.csv")
+
+worldcup.datatocsv(worldcup.results(2018),"results.csv")

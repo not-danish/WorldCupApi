@@ -31,6 +31,7 @@ def searchteam(team_name: str) -> int:
     return data[0]['id']
 
 def getseason_id(year: int):
+  #Gets the season_id for a specific world cup year.   
   url = getapiurl("leagues/732",{"include":"seasons"})
   data = datatodict(url)['data']['seasons']['data']
   for i in range(len(data)):
@@ -116,7 +117,19 @@ def squad(team: str, year: int) -> List[Dict]:
       data = {}
     else:
       data = data['data']['squad']['data']
+      for i in range(len(data)):
+        data[i].pop("player")
       return data
+
+def results(year: int) -> List[Dict]:
+  season_id = getseason_id(year)
+  if season_id == None:
+    return {}
+  else:
+    url = getapiurl(f"seasons/{season_id}",{"include":"results"})
+    data = datatodict(url)['data']['results']['data']
+    print(data[0])
+    return data
 
 def fields(data: dict) -> list:
   #gets all of the fields for a specific dict

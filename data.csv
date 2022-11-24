@@ -1,0 +1,2 @@
+player_id,team_id,country_id,position_id,common_name,display_name,fullname,firstname,lastname,nationality,birthdate,birthcountry,birthplace,height,weight,image_path,position
+643,,3483,3,C. Reyna,Claudio Reyna,Claudio Reyna,Claudio,Reyna,United States,20/07/1973,United States,Livingston,178 cm,72 kg,https://cdn.sportmonks.com/images/soccer/placeholder.png,"{'data': {'id': 3, 'name': 'Midfielder'}}"

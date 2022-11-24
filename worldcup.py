@@ -1,4 +1,4 @@
-#This script was created by Danish Siddiqui for MTA's Python Event.
+#This script was created by Danish Siddiqui for MTA's Python Event, held at the BRIDGE in the University of Toronto Scarborough.
 from typing import List, Dict
 import requests
 import json
@@ -59,14 +59,26 @@ def teamgoals(team_name: str, year: int) -> List[Dict]:
 
 def player(player_id: int) -> List[Dict]:
   #gets info on players based on player_id
-  url = getapiurl(f"players/{player_id}", {})
+  url = getapiurl(f"players/{player_id}", {"include":"position"})
   data = datatodict(url)
   if 'meta' in data:
     data.pop('meta')
+    data_list = []
+    data_list.append(data["data"])
   else:
     data = {}
-  return data
+    data_list = []
+    data_list.append(data)
+  return data_list
 
+def position(player_id: int) -> List[Dict]:
+  #gets player position
+  players = player(player_id)
+  player_position = players[0]
+  if player_position != {}:
+    player_position = players[0]['position']['data']
+  return player_position
+  
 def topscorers(year: int) -> List[Dict]:
   #gets top 25 scorers for the world cup season (season_id)
   season_id = getseason_id(year)
@@ -81,7 +93,6 @@ def topscorers(year: int) -> List[Dict]:
       data = data['data']['goalscorers']['data']
       for player in range(len(data)):
         if 'player' in data[player]:
-          data[player]['player_id'] = data[player]['player']['player_id']
           data[player].pop('player')
           data[player].pop('type')
     return data
@@ -105,21 +116,31 @@ def topassist(year: int) -> List[Dict]:
           data[player].pop('type')
     return data
 
-def squad(team: str, year: int) -> List[Dict]:
-  season_id = getseason_id(year)
+def currentsquad(team: str) -> List[Dict]:
+  #Gives the current squad of the team
   team_id = searchteam(team)
-  if season_id == None:
-    return {}
+  url = getapiurl(f"teams/{team_id}",{"include":"squad.player"})
+  data = datatodict(url)
+  if 'data' not in data:
+    data = [{}]
   else:
-    url = getapiurl(f"teams/{team_id}",{"include":"squad.player"})
-    data = datatodict(url)
-    if 'data' not in data:
-      data = {}
-    else:
-      data = data['data']['squad']['data']
-      for i in range(len(data)):
-        data[i].pop("player")
-      return data
+    data = data['data']['squad']['data']
+    for i in range(len(data)):
+      data[i].pop("player")
+    return data
+
+def squad(team: str, year: int) -> List[Dict]:
+  team_id = searchteam(team)
+  season_id = getseason_id(year)
+  url = getapiurl(f"squad/season/{season_id}/team/{team_id}", {"include":"player"})
+  data = datatodict(url)
+  if 'data' not in data:
+    data = [{}]
+  else:
+    data = data['data']
+    for i in range(len(data)):
+      data[i].pop("player")
+  return data
 
 def results(year: int) -> List[Dict]:
   season_id = getseason_id(year)
@@ -128,12 +149,13 @@ def results(year: int) -> List[Dict]:
   else:
     url = getapiurl(f"seasons/{season_id}",{"include":"results"})
     data = datatodict(url)['data']['results']['data']
-    print(data[0])
     return data
 
 def fields(data: dict) -> list:
   #gets all of the fields for a specific dict
   fields = []
+  if data == fields:
+    return None
   for key in data[0]:
     fields.append(key)
   return fields
@@ -141,6 +163,9 @@ def fields(data: dict) -> list:
 def datatocsv(data: list, filename: str) -> None:
   #converts the dict data to a csv with name filename
   columns = fields(data)
+  if columns == None:
+    print("Error: Can't create a csv from an empty list.")
+    return None
   try:
       with open(filename, 'w') as csvfile:
           writer = csv.DictWriter(csvfile, fieldnames=columns)
